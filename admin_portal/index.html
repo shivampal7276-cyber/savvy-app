@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#040a1c">
+  <title>Savyyk · Admin</title>
+  <style>
+    :root{color-scheme:dark;--bg:#040a1c;--panel:#0e162f;--panel2:#111b3c;--line:#202b4b;--muted:#8f9ab5;--text:#f4f7ff;--cyan:#24d6ff;--blue:#2f7bff;--green:#56e0b4;--red:#ff778b}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+    .shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}.sidebar{background:#070e24;border-right:1px solid var(--line);padding:25px 17px;display:flex;flex-direction:column;gap:36px}.brand{display:flex;align-items:center;gap:12px;padding:0 8px}.brand img{height:42px;width:42px;border-radius:13px;object-fit:cover}.brand strong{font-size:17px;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font-size:11px}.nav-label{padding:0 12px;color:#697591;font-size:10px;font-weight:800;letter-spacing:1.6px}.nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#9ba6bf;text-align:left;padding:12px;border-radius:12px;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{color:var(--cyan);background:#10203e}.nav .ico{width:21px;text-align:center;font-size:17px}.side-note{margin-top:auto;border:1px solid #27365b;border-radius:14px;background:#0b1530;padding:14px;color:var(--muted);font-size:11px}.side-note b{display:block;color:#f5c96a;margin-bottom:5px}
+    main{min-width:0;padding:28px clamp(18px,4vw,54px) 44px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:27px}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}.topbar h1{margin:4px 0 0;font-size:clamp(24px,3vw,32px);letter-spacing:-.7px}.right-tools{display:flex;align-items:center;gap:10px}.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#0a122a}.dot{width:8px;height:8px;border-radius:50%;background:#f3be51}.dot.online{background:var(--green);box-shadow:0 0 12px #56e0b477}.refresh{border:1px solid var(--line);border-radius:11px;color:var(--text);background:var(--panel);padding:10px 13px}.refresh:hover{border-color:var(--cyan);color:var(--cyan)}
+    .notice{display:flex;gap:12px;align-items:flex-start;padding:13px 16px;border-radius:13px;border:1px solid #6c5126;background:#211b11;color:#e9d39e;font-size:12px;margin-bottom:20px}.notice b{color:#ffda7a}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#111b3c,#0d152d);padding:18px}.stat-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.stat-icon{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:#14284b;color:var(--cyan);font-size:17px}.stat-value{margin-top:15px;font-size:25px;font-weight:800;letter-spacing:-.5px}.stat-foot{margin-top:3px;color:#77839f;font-size:11px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:30px 0 14px}.section-head h2{margin:0;font-size:18px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.filters{display:flex;gap:9px}.filters input,.filters select{background:#0d1731;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);outline:none}.filters input{width:min(260px,35vw)}.filters input:focus,.filters select:focus{border-color:var(--cyan)}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:17px;background:#0a1228}.table{width:100%;border-collapse:collapse;min-width:720px}.table th{padding:14px 17px;color:#8490ad;background:#0d1731;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px}.table td{padding:15px 17px;border-top:1px solid #1c2745;white-space:nowrap}.table tr:hover td{background:#101a35}.kind{display:inline-flex;align-items:center;gap:8px;font-weight:700}.kind .mark{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:#102b2c;color:var(--green)}.kind.withdraw .mark{background:#301b2b;color:var(--red)}.kind.withdraw{color:#ffb6c0}.kind.deposit{color:#8df0cf}.user-name{font-weight:700}.user-id,.subtle{color:var(--muted);font-size:11px}.amount{font-weight:800;color:var(--green)}.amount.withdraw{color:var(--red)}.empty{padding:48px 16px;text-align:center;color:var(--muted)}.empty .empty-icon{font-size:28px;margin-bottom:8px;color:#52617f}.empty b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}.footer{display:flex;justify-content:space-between;gap:14px;color:#65718e;font-size:11px;margin-top:16px}
+    @media(max-width:980px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{grid-template-columns:210px minmax(0,1fr)}}@media(max-width:680px){.shell{display:block}.sidebar{padding:12px 15px;border-right:0;border-bottom:1px solid var(--line);gap:12px}.brand{padding:0}.nav-label,.side-note{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:8px 11px}.nav button:not(.active){display:none}.nav button.active{display:flex}.topbar{align-items:flex-start;flex-direction:column}.right-tools{width:100%;justify-content:space-between}.section-head{align-items:flex-start;flex-direction:column}.filters{width:100%}.filters input{flex:1;width:1px}.stats{gap:9px}.card{padding:13px}.stat-value{font-size:21px}.footer{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><img src="/assets/logo.png" alt="Savyyk logo"><div><strong>Savyyk</strong><small>Admin portal</small></div></div>
+      <div>
+        <div class="nav-label">MONITORING</div>
+        <nav class="nav"><button class="active" type="button"><span class="ico">▦</span>Transactions</button></nav>
+      </div>
+      <div class="side-note"><b>Development mode</b>Transactions are held in server memory and clear when the server restarts.</div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div><div class="eyebrow">Site administration</div><h1>Transaction activity</h1></div>
+        <div class="right-tools"><div class="status"><span id="statusDot" class="dot"></span><span id="statusText">Connecting to API…</span></div><button id="refresh" class="refresh" type="button">↻ &nbsp;Refresh</button></div>
+      </header>
+      <div class="notice"><span>⚠</span><div><b>Local prototype:</b> this portal has no admin sign-in yet and the server does not use a database. Run it only on a trusted development network.</div></div>
+      <section class="stats" aria-label="Transaction summary">
+        <article class="card"><div class="stat-head">Deposits <span class="stat-icon">↓</span></div><div id="depositTotal" class="stat-value">₹0</div><div id="depositCount" class="stat-foot">0 deposit transactions</div></article>
+        <article class="card"><div class="stat-head">Withdrawals <span class="stat-icon">↑</span></div><div id="withdrawalTotal" class="stat-value">₹0</div><div id="withdrawalCount" class="stat-foot">0 withdrawal transactions</div></article>
+        <article class="card"><div class="stat-head">Net movement <span class="stat-icon">↔</span></div><div id="netMovement" class="stat-value">₹0</div><div class="stat-foot">Deposits minus withdrawals</div></article>
+        <article class="card"><div class="stat-head">All activity <span class="stat-icon">≋</span></div><div id="transactionCount" class="stat-value">0</div><div class="stat-foot">Recorded transactions</div></article>
+      </section>
+      <section>
+        <div class="section-head"><div><h2>Deposits and withdrawals</h2><p>Review the user, amount, reference, and time for each transaction.</p></div><div class="filters"><input id="search" type="search" placeholder="Search user or reference" aria-label="Search transactions"><select id="typeFilter" aria-label="Filter transaction type"><option value="all">All activity</option><option value="deposit">Deposits</option><option value="withdrawal">Withdrawals</option></select></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Activity</th><th>User</th><th>Date & time</th><th>Reference</th><th>Amount</th></tr></thead><tbody id="rows"><tr><td colspan="5"><div class="empty">Loading transactions…</div></td></tr></tbody></table></div>
+      </section>
+      <section>
+        <div class="section-head"><div><h2>Account sign-ins</h2><p>Names, email or phone, and sign-in activity. Passwords are never collected.</p></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Email / phone</th><th>Account created</th><th>Last sign-in</th><th>Sign-ins</th></tr></thead><tbody id="userRows"><tr><td colspan="5"><div class="empty">Loading accounts…</div></td></tr></tbody></table></div>
+      </section>      <div class="footer"><span>Savyyk admin · Development server</span><span id="lastUpdated">Waiting for first update</span></div>
+    </main>
+  </div>
+  <script>
+    const API_BASE_URL = 'http://localhost:3000';
+    const money = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(value || 0);
+    const dateTime = (value) => new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    async function load() {
+      try {
+        const [summaryResponse, transactionResponse, usersResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/admin/summary`),
+          fetch(`${API_BASE_URL}/api/admin/transactions?type=${encodeURIComponent(document.querySelector('#typeFilter').value)}&search=${encodeURIComponent(document.querySelector('#search').value)}`),
+          fetch(`${API_BASE_URL}/api/admin/users`),
+        ]);
+        if (!summaryResponse.ok || !transactionResponse.ok || !usersResponse.ok) throw new Error('The server returned an error.');
+        const summary = await summaryResponse.json();
+        const data = await transactionResponse.json();
+        const userData = await usersResponse.json();
+        document.querySelector('#depositTotal').textContent = money(summary.depositTotal);
+        document.querySelector('#depositCount').textContent = `${summary.depositCount} deposit transaction${summary.depositCount === 1 ? '' : 's'}`;
+        document.querySelector('#withdrawalTotal').textContent = money(summary.withdrawalTotal);
+        document.querySelector('#withdrawalCount').textContent = `${summary.withdrawalCount} withdrawal transaction${summary.withdrawalCount === 1 ? '' : 's'}`;
+        document.querySelector('#netMovement').textContent = money(summary.netMovement);
+        document.querySelector('#transactionCount').textContent = summary.transactionCount;
+        document.querySelector('#statusDot').classList.add('online');
+        document.querySelector('#statusText').textContent = 'API connected';
+        const rows = document.querySelector('#rows');
+        if (!data.transactions.length) {
+          rows.innerHTML = '<tr><td colspan="5"><div class="empty"><div class="empty-icon">⌁</div><b>No transactions yet</b>Deposit and withdrawal activity sent by the app will appear here.</div></td></tr>';
+        } else {
+          rows.innerHTML = data.transactions.map((item) => {
+            const withdrawal = item.type === 'withdrawal';
+            return `<tr><td><span class="kind ${withdrawal ? 'withdraw' : 'deposit'}"><span class="mark">${withdrawal ? '↑' : '↓'}</span>${withdrawal ? 'Withdrawal' : 'Deposit'}</span></td><td><div class="user-name">${escapeHtml(item.userName)}</div><div class="user-id">${escapeHtml(item.userId)}</div></td><td>${escapeHtml(dateTime(item.createdAt))}</td><td class="subtle">${escapeHtml(item.reference)}</td><td class="amount ${withdrawal ? 'withdraw' : ''}">${withdrawal ? '−' : '+'}${money(item.amount)}</td></tr>`;
+          }).join('');
+        }
+        const userRows = document.querySelector('#userRows');
+        if (!userData.users.length) {
+          userRows.innerHTML = '<tr><td colspan="5"><div class="empty"><b>No sign-ins recorded yet</b>New sign-ups and sign-ins will appear here.</div></td></tr>';
+        } else {
+          userRows.innerHTML = userData.users.map((user) =>
+            `<tr><td><div class="user-name">${escapeHtml(user.displayName)}</div></td><td>${escapeHtml(user.identity)}</td><td>${escapeHtml(dateTime(user.createdAt))}</td><td>${escapeHtml(dateTime(user.lastLoginAt))}</td><td>${Number(user.signInCount) || 0}</td></tr>`,
+          ).join('');
+        }
+        document.querySelector('#lastUpdated').textContent = `Updated ${new Intl.DateTimeFormat('en-IN', { timeStyle: 'short' }).format(new Date())}`;
+      } catch (error) {
+        document.querySelector('#statusDot').classList.remove('online');
+        document.querySelector('#statusText').textContent = 'API unavailable';
+        document.querySelector('#rows').innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">!</div><b>Can’t reach the server</b>${escapeHtml(error.message)} Start the Savyyk server and refresh.</div></td></tr>`;
+      }
+    }
+    document.querySelector('#refresh').addEventListener('click', load);
+    document.querySelector('#typeFilter').addEventListener('change', load);
+    let searchTimer;
+    document.querySelector('#search').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(load, 250); });
+    load();
+    setInterval(load, 10000);
+  </script>
+</body>
+</html>

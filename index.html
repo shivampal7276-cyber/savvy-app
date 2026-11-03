@@ -41,28 +41,22 @@
         <div class="section-head"><div><h2>Deposits and withdrawals</h2><p>Review the user, amount, reference, and time for each transaction.</p></div><div class="filters"><input id="search" type="search" placeholder="Search user or reference" aria-label="Search transactions"><select id="typeFilter" aria-label="Filter transaction type"><option value="all">All activity</option><option value="deposit">Deposits</option><option value="withdrawal">Withdrawals</option></select></div></div>
         <div class="table-wrap"><table class="table"><thead><tr><th>Activity</th><th>User</th><th>Date & time</th><th>Reference</th><th>Amount</th></tr></thead><tbody id="rows"><tr><td colspan="5"><div class="empty">Loading transactions…</div></td></tr></tbody></table></div>
       </section>
-      <section>
-        <div class="section-head"><div><h2>Account sign-ins</h2><p>Names, email or phone, and sign-in activity. Passwords are never collected.</p></div></div>
-        <div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Email / phone</th><th>Account created</th><th>Last sign-in</th><th>Sign-ins</th></tr></thead><tbody id="userRows"><tr><td colspan="5"><div class="empty">Loading accounts…</div></td></tr></tbody></table></div>
-      </section>      <div class="footer"><span>Savyyk admin · Development server</span><span id="lastUpdated">Waiting for first update</span></div>
+      <div class="footer"><span>Savyyk admin · Development server</span><span id="lastUpdated">Waiting for first update</span></div>
     </main>
   </div>
   <script>
-    const API_BASE_URL = 'http://localhost:3000';
     const money = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(value || 0);
     const dateTime = (value) => new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
     const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
     async function load() {
       try {
-        const [summaryResponse, transactionResponse, usersResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/admin/summary`),
-          fetch(`${API_BASE_URL}/api/admin/transactions?type=${encodeURIComponent(document.querySelector('#typeFilter').value)}&search=${encodeURIComponent(document.querySelector('#search').value)}`),
-          fetch(`${API_BASE_URL}/api/admin/users`),
+        const [summaryResponse, transactionResponse] = await Promise.all([
+          fetch('/api/admin/summary'),
+          fetch(`/api/admin/transactions?type=${encodeURIComponent(document.querySelector('#typeFilter').value)}&search=${encodeURIComponent(document.querySelector('#search').value)}`),
         ]);
-        if (!summaryResponse.ok || !transactionResponse.ok || !usersResponse.ok) throw new Error('The server returned an error.');
+        if (!summaryResponse.ok || !transactionResponse.ok) throw new Error('The server returned an error.');
         const summary = await summaryResponse.json();
         const data = await transactionResponse.json();
-        const userData = await usersResponse.json();
         document.querySelector('#depositTotal').textContent = money(summary.depositTotal);
         document.querySelector('#depositCount').textContent = `${summary.depositCount} deposit transaction${summary.depositCount === 1 ? '' : 's'}`;
         document.querySelector('#withdrawalTotal').textContent = money(summary.withdrawalTotal);
@@ -79,14 +73,6 @@
             const withdrawal = item.type === 'withdrawal';
             return `<tr><td><span class="kind ${withdrawal ? 'withdraw' : 'deposit'}"><span class="mark">${withdrawal ? '↑' : '↓'}</span>${withdrawal ? 'Withdrawal' : 'Deposit'}</span></td><td><div class="user-name">${escapeHtml(item.userName)}</div><div class="user-id">${escapeHtml(item.userId)}</div></td><td>${escapeHtml(dateTime(item.createdAt))}</td><td class="subtle">${escapeHtml(item.reference)}</td><td class="amount ${withdrawal ? 'withdraw' : ''}">${withdrawal ? '−' : '+'}${money(item.amount)}</td></tr>`;
           }).join('');
-        }
-        const userRows = document.querySelector('#userRows');
-        if (!userData.users.length) {
-          userRows.innerHTML = '<tr><td colspan="5"><div class="empty"><b>No sign-ins recorded yet</b>New sign-ups and sign-ins will appear here.</div></td></tr>';
-        } else {
-          userRows.innerHTML = userData.users.map((user) =>
-            `<tr><td><div class="user-name">${escapeHtml(user.displayName)}</div></td><td>${escapeHtml(user.identity)}</td><td>${escapeHtml(dateTime(user.createdAt))}</td><td>${escapeHtml(dateTime(user.lastLoginAt))}</td><td>${Number(user.signInCount) || 0}</td></tr>`,
-          ).join('');
         }
         document.querySelector('#lastUpdated').textContent = `Updated ${new Intl.DateTimeFormat('en-IN', { timeStyle: 'short' }).format(new Date())}`;
       } catch (error) {

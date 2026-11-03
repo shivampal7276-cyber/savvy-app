@@ -1,0 +1,9 @@
+{
+  "name": "savyyk-local-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local in-memory API and admin portal server for Savyyk development.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
